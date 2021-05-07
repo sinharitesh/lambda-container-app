@@ -10,16 +10,13 @@ import boto3
 s3_client = boto3.client('s3')
 
 from fastai.vision.all import load_learner
-#import fastai
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
 mdl = load_learner('export.pkl')
-print("Learner loaded.")
 
 def download_file_from_s3_bucket(bucket_name = "ecg-png-data", file_name = "s0558_re.png"):
     s3_client.download_file(bucket_name, file_name, "/tmp/s3.png")  
-    return("done")
 
 
 def download_file(url):
@@ -27,11 +24,11 @@ def download_file(url):
     urllib.request.urlretrieve(url, file_name)
 
 
+
 def lambda_handler(event, context):
-    """Sample pure Lambda function
+    """ Lambda function for prediction
     """
     logger.info(event)
-    print("Getting input object", event)
     img_fname = ""
     try:
         logger.info(event['body'])
@@ -53,9 +50,7 @@ def lambda_handler(event, context):
     start = time.time()
     fname = img_fname
     download_file_from_s3_bucket(file_name = fname)
-    #out = mdl.predict('/tmp/test_file.png')
     out = mdl.predict("/tmp/s3.png")
-    print(out[1], out[2])
     probability = -1
     try:
         probability = max(out[2].numpy())
@@ -65,8 +60,6 @@ def lambda_handler(event, context):
     inference_time = np.round((end - start) * 1000, 2)
     
     message = f'For file:{img_fname}- result is: [{out[0]}] time taken: {str(inference_time)} ms'
-    #message = fastai.__version__ 
-    #print("test")
     return {
         "statusCode": 200,
         "body": json.dumps(
@@ -79,3 +72,4 @@ def lambda_handler(event, context):
             }
         ),
     }
+

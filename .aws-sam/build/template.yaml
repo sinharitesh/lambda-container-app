@@ -1,0 +1,44 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: 'fastai-container-app
+
+  Sample SAM Template for fastai-container-app
+
+  '
+Globals:
+  Function:
+    Timeout: 30
+    MemorySize: 1048
+Resources:
+  FastaiVisionFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      PackageType: Image
+      Events:
+        FastaiVision:
+          Type: Api
+          Properties:
+            Path: /invocations
+            Method: post
+      ImageUri: fastaivisionfunction:python3.6-v1
+    Metadata:
+      DockerTag: python3.6-v1
+      DockerContext: ./vision
+      Dockerfile: Dockerfile
+Outputs:
+  FastaiVisionApi:
+    Description: API Gateway endpoint URL for Prod stage for fastai inference function
+    Value:
+      Fn::Sub: https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/invocations/
+  FastaiVisionFunction:
+    Description: fastai inference Lambda Function ARN
+    Value:
+      Fn::GetAtt:
+      - FastaiVisionFunction
+      - Arn
+  FastaiVisionFunctionIamRole:
+    Description: Implicit IAM Role created for fastai inference function
+    Value:
+      Fn::GetAtt:
+      - FastaiVisionFunctionRole
+      - Arn
