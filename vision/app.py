@@ -4,7 +4,7 @@ from io import BytesIO
 import logging
 import requests
 import numpy as np
-
+import os
 import urllib
 import boto3
 s3_client = boto3.client('s3')
@@ -15,10 +15,12 @@ logger.setLevel(logging.INFO)
 
 mdl = load_learner('export.pkl')
 FILE_BUCKET=os.environ.get('FILE_BUCKET')
+TEMP_FILE_NAME = "/tmp/tempfile.png"
+
 logger.info(f'File Bucket is {FILE_BUCKET}')
 
 def download_file_from_s3_bucket(file_name):
-    s3_client.download_file(FILE_BUCKET, file_name, "/tmp/s3.png")  
+    s3_client.download_file(FILE_BUCKET, file_name, TEMP_FILE_NAME)  
 
 
 def download_file(url):
@@ -31,6 +33,7 @@ def lambda_handler(event, context):
     """ Lambda function for prediction
     """
     logger.info(event)
+    logger.info(f"Bucket Name: {FILE_BUCKET}")
     img_fname = ""
     try:
         logger.info(event['body'])
@@ -52,7 +55,7 @@ def lambda_handler(event, context):
     start = time.time()
     fname = img_fname
     download_file_from_s3_bucket(file_name = fname)
-    out = mdl.predict("/tmp/s3.png")
+    out = mdl.predict(TEMP_FILE_NAME)
     probability = -1
     try:
         probability = max(out[2].numpy())
@@ -60,17 +63,16 @@ def lambda_handler(event, context):
         pass
     end = time.time()
     inference_time = np.round((end - start) * 1000, 2)
-    
-    message = f'For file:{img_fname}- result is: [{out[0]}] time taken: {str(inference_time)} ms'
+    logger.info(f'inference time for {img_fname}: {inference_time} ms')
+    #message = f'For file:{img_fname}- result is: [{out[0]}] time taken: {str(inference_time)} ms'
+    message = "API-OK"
     return {
         "statusCode": 200,
         "body": json.dumps(
             {
                 "prediciton": out[0],
                 "probability": str(probability),
-                "file_info": img_fname,
-                "time_taken": f' {str(inference_time)} ms',
-                "message": message
+                "file_info": img_fname
             }
         ),
     }
