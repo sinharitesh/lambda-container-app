@@ -14,9 +14,11 @@ logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
 mdl = load_learner('export.pkl')
+FILE_BUCKET=os.environ.get('FILE_BUCKET')
+logger.info(f'File Bucket is {FILE_BUCKET}')
 
-def download_file_from_s3_bucket(bucket_name = "ecg-png-data", file_name = "s0558_re.png"):
-    s3_client.download_file(bucket_name, file_name, "/tmp/s3.png")  
+def download_file_from_s3_bucket(file_name):
+    s3_client.download_file(FILE_BUCKET, file_name, "/tmp/s3.png")  
 
 
 def download_file(url):
