@@ -64,7 +64,6 @@ def lambda_handler(event, context):
     end = time.time()
     inference_time = np.round((end - start) * 1000, 2)
     logger.info(f'inference time for {img_fname}: {inference_time} ms')
-    #message = f'For file:{img_fname}- result is: [{out[0]}] time taken: {str(inference_time)} ms'
     message = "API-OK"
     return {
         "statusCode": 200,
@@ -72,7 +71,8 @@ def lambda_handler(event, context):
             {
                 "prediciton": out[0],
                 "probability": str(probability),
-                "file_info": img_fname
+                "file_info": img_fname,
+                "message": message
             }
         ),
     }
