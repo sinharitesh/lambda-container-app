@@ -22,7 +22,7 @@ The Serverless Application Model Command Line Interface (SAM CLI) is an extensio
 
 To use the SAM CLI, you need the following tools.
 
-* SAM CLI - [Install the SAM CLI](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install.html)
+* SAM CLI - [Install the SAM CLI](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install.html) `sudo ./sam-installation/install`
 * Docker - [Install Docker community edition](https://hub.docker.com/search/?type=edition&offering=community) - This is optional
 
 You may need the following for local testing.
@@ -120,3 +120,44 @@ Thanks to [fastai container sam app by Matt](https://github.com/mattmcclean/fast
 See the [AWS SAM developer guide](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/what-is-sam.html) for an introduction to SAM specification, the SAM CLI, and serverless application concepts.
 
 Next, you can use AWS Serverless Application Repository to deploy ready to use Apps that go beyond hello world samples and learn how authors developed their applications: [AWS Serverless Application Repository main page](https://aws.amazon.com/serverless/serverlessrepo/)
+
+## Notes
+After doing SAM build, once can test the function with the command - `sam local invoke FastaiVisionFunction --event event.json`
+If deploying a new application , use sam deploy --guided --capabilities = CAPABILITY_IAM
+It is important that your AWS role should have proper access to various resources, otherwise deployment could fail.
+
+Following could be useful:
+
+Inline policy details:
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "FirstStatement",
+            "Effect": "Allow",
+            "Action": "ecr:InitiateLayerUpload",
+            "Resource": "arn:aws:ecr:us-east-1:<account-id>:repository/ecr-dl-lambda"
+        },
+        {
+            "Sid": "SecondStatement",
+            "Effect": "Allow",
+            "Action": "ecr:UploadLayerPart",
+            "Resource": "arn:aws:ecr:us-east-1:<account-id>:repository/ecr-dl-lambda"
+        },
+        {
+            "Sid": "Third",
+            "Effect": "Allow",
+            "Action": "ecr:CompleteLayerUpload",
+            "Resource": "arn:aws:ecr:us-east-1:<account-id>:repository/ecr-dl-lambda"
+        },
+        {
+            "Sid": "Fourth",
+            "Effect": "Allow",
+            "Action": "ecr:PutImage",
+            "Resource": "arn:aws:ecr:us-east-1:<account-id>:repository/ecr-dl-lambda"
+        }
+    ]
+}
+
+
+
