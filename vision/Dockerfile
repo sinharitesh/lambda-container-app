@@ -1,6 +1,6 @@
 FROM public.ecr.aws/lambda/python:3.6
 
-COPY requirements.txt .
+#COPY requirements.txt .
 
 RUN pip install --upgrade pip
 
