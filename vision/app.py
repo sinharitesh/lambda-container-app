@@ -7,17 +7,18 @@ import numpy as np
 import os
 import urllib
 import boto3
-s3_client = boto3.client('s3')
 
-from fastai.vision.all import load_learner
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
-mdl = load_learner('export.pkl')
+logger.info("FUNCTION STARTED.")
 FILE_BUCKET=os.environ.get('FILE_BUCKET')
-TEMP_FILE_NAME = "/tmp/tempfile.png"
-
-logger.info(f'File Bucket is {FILE_BUCKET}')
+#FILE_BUCKET = "your-hardcoded-bucket-name"
+logger.info(f'File Bucket is </FILEBUCKET>{FILE_BUCKET}</FILEBUCKET>')
+ 
+s3_client = boto3.client('s3')
+#from fastai.vision.all import load_learner
+from fastai.vision.all import *
 
 def download_file_from_s3_bucket(file_name):
     s3_client.download_file(FILE_BUCKET, file_name, TEMP_FILE_NAME)  
@@ -28,10 +29,20 @@ def download_file(url):
     urllib.request.urlretrieve(url, file_name)
 
 
+TEMP_FILE_NAME = "/tmp/tempfile.png"
+MODEL_LOADED = "N"
 
 def lambda_handler(event, context):
     """ Lambda function for prediction
     """
+    global MODEL_LOADED
+    mdl = None
+    if (MODEL_LOADED == "N"):
+        logger.info("LOADING EXPORT pkl file.")
+        mdl = load_learner('export.pkl')
+        logger.info("MODEL LOADED.")
+        MODEL_LOADED = "Y"
+    
     logger.info(event)
     logger.info(f"Bucket Name: {FILE_BUCKET}")
     img_fname = ""

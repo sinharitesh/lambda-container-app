@@ -1,5 +1,4 @@
 *.bak
-*.csv
 *.pdf
 *.zip
 .gitattributes
@@ -7,8 +6,6 @@
 .gitconfig
 *.bak
 *.log
-*.pkl
-*.toml
 *.json
 .aws-sam
 *~
