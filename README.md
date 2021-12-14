@@ -8,7 +8,6 @@ It includes the following files and folders.
 - *training.ipynb* or training.py
 - *vision* - Code for the application's Lambda function and Project Dockerfile. The exported fastai model vision classification model should be copied here and named `export.pkl`.
 - *events* - Invocation events that you can use to invoke the function.
-- *tests* - Unit tests for the application code. 
 - *template.yaml* - A template that defines the application's AWS resources.
 
 The application uses several AWS resources, including Lambda functions and an API Gateway API. These resources are defined in the `template.yaml` file in this project. You can update the template to add AWS resources through the same deployment process that updates your application code.
@@ -118,7 +117,6 @@ You can find more information and examples about filtering Lambda function logs 
 ## Resources
 
 Thanks to [fastai container sam app by Matt](https://github.com/mattmcclean/fastai-container-sam-app)
-
 See the [AWS SAM developer guide](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/what-is-sam.html) for an introduction to SAM specification, the SAM CLI, and serverless application concepts.
 
 Next, you can use AWS Serverless Application Repository to deploy ready to use Apps that go beyond hello world samples and learn how authors developed their applications: [AWS Serverless Application Repository main page](https://aws.amazon.com/serverless/serverlessrepo/)
