@@ -159,5 +159,35 @@ Inline policy details:
     ]
 }
 
-
+The fastai lambda function should have access to S3 repo where Images are stored, this can be achieved with following:
+get_S3 Role:
+{
+"Version": "2012-10-17",
+"Statement": [
+{
+"Sid": "VisualEditor0",
+"Effect": "Allow",
+"Action": "s3:GetObject",
+"Resource": "arn:aws:s3:::*/*"
+},
+{
+"Sid": "VisualEditor1",
+"Effect": "Allow",
+"Action": [
+"s3:DescribeJob",
+"s3:ListBucket"
+],
+"Resource": [
+"arn:aws:s3:::*",
+"arn:aws:s3:*:<account-id>:job/*"
+]
+},
+{
+"Sid": "VisualEditor2",
+"Effect": "Allow",
+"Action": "s3:ListStorageLensConfigurations",
+"Resource": "*"
+}
+]
+}
 
