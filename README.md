@@ -12,6 +12,9 @@ It includes the following files and folders.
 
 The application uses several AWS resources, including Lambda functions and an API Gateway API. These resources are defined in the `template.yaml` file in this project. You can update the template to add AWS resources through the same deployment process that updates your application code.
 
+## Prediction of heart condition on an ECG image
+![Output from Lambda function of deployed model](./api-output.png)
+
 
 ## Perform the training using the script training.py
 Use the source code and data to train a model. Output of this file is a pickle file which contains the model in *export.pkl*.
@@ -70,7 +73,7 @@ You can find your API Gateway Endpoint URL in the output values displayed after 
 Build your application with the `sam build` command.
 
 ```bash
-fastai-container-sam-app$ sam build
+lambda-container-app$ sam build
 ```
 
 The SAM CLI builds a docker image from a Dockerfile and then installs dependencies inside the docker image. The processed template file is saved in the `.aws-sam/build` folder.
