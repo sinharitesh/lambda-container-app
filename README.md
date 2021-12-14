@@ -1,17 +1,21 @@
-# Example SAM Container Lambda app for fastai
+# End to End training and Productionizing of deep learning models
 
-This project contains source code and supporting files for a serverless application that you can deploy with the SAM CLI. 
-
-The source code is an example computer vision classification model that returns the class and probability in json format.
+This project contains source code and supporting files for training and deploying deep learning model with fastai. The deployment is a serverless application that one can deploy with the SAM CLI. The structure of this project is as following:
+- There is a training file training.ipynb and training.py which trains the model
+- An application which makes it possible to use the trained model above for getting inferences. The source code is an example computer vision classification model that returns the class and probability in json format.
 
 It includes the following files and folders.
-
+- *training.ipynb* or training.py
 - *vision* - Code for the application's Lambda function and Project Dockerfile. The exported fastai model vision classification model should be copied here and named `export.pkl`.
 - *events* - Invocation events that you can use to invoke the function.
 - *tests* - Unit tests for the application code. 
 - *template.yaml* - A template that defines the application's AWS resources.
 
 The application uses several AWS resources, including Lambda functions and an API Gateway API. These resources are defined in the `template.yaml` file in this project. You can update the template to add AWS resources through the same deployment process that updates your application code.
+
+
+## Perform the training using the script training.py
+Use the source code and data to train a model. Output of this file is a pickle file which contains the model in *export.pkl*.
 
 ## Install the SAM CLI and Docker
 
@@ -20,7 +24,7 @@ The Serverless Application Model Command Line Interface (SAM CLI) is an extensio
 To use the SAM CLI, you need the following tools.
 
 * SAM CLI - [Install the SAM CLI](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install.html)
-* Docker - [Install Docker community edition](https://hub.docker.com/search/?type=edition&offering=community)
+* Docker - [Install Docker community edition](https://hub.docker.com/search/?type=edition&offering=community) - This is optional
 
 You may need the following for local testing.
 * [Python 3 installed](https://www.python.org/downloads/)
@@ -30,7 +34,7 @@ You may need the following for local testing.
 Clone this github repository to your machine where you have installed the SAM CLI and Docker.
 
 ```
-git clone https://github.com/mattmcclean/fastai-container-sam-app.git
+git clone https://github.com/sinharitesh/lambda-container-app.git
 ```
 
 ## Export your fastai model
@@ -77,14 +81,14 @@ Test a single function by invoking it directly with a test event. An event is a 
 Run functions locally and invoke them with the `sam local invoke` command.
 
 ```bash
-fastai-container-sam-app$ sam local invoke FastaiVisionFunction --event events/event.json
+lambda-container-app$ sam local invoke FastaiVisionFunction --event event.json
 ```
 
 The SAM CLI can also emulate your application's API. Use the `sam local start-api` to run the API locally on port 3000.
 
 ```bash
-fastai-container-sam-app$ sam local start-api
-fastai-container-sam-app$ curl http://localhost:3000/
+lambda-container-app$ sam local start-api
+lambda-container-app$ curl http://localhost:3000/
 ```
 
 The SAM CLI reads the application template to determine the API's routes and the functions that they invoke. The `Events` property on each function's definition includes the route and method for each path.
@@ -105,38 +109,15 @@ To simplify troubleshooting, SAM CLI has a command called `sam logs`. `sam logs`
 `NOTE`: This command works for all AWS Lambda functions; not just the ones you deploy using SAM.
 
 ```bash
-fastai-container-sam-app$ sam logs -n FastaiVisionFunction --stack-name fastai-container-sam-app --tail
+lambda-container-app$ sam logs -n FastaiVisionFunction --stack-name lambda-container-app --tail
 ```
 
 You can find more information and examples about filtering Lambda function logs in the [SAM CLI Documentation](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-logging.html).
 
-## Unit tests
-
-First create a virtual python environment and install the necessary packages.
-
-```bash
-fastai-container-sam-app$ python3 -m venv fastai-env
-fastai-container-sam-app$ source fastai-env/bin/activate
-fastai-container-sam-app$ pip install pytest pytest-mock
-fastai-container-sam-app$ pip install -r vision/requirements.txt
-fastai-container-sam-app$ ln -s vision/export.pkl export.pkl
-```
-
-Tests are defined in the `tests` folder in this project. Use PIP to install the [pytest](https://docs.pytest.org/en/latest/) and run unit tests from your local machine.
-
-```bash
-fastai-container-sam-app$ python -m pytest tests/ -v
-```
-
-## Cleanup
-
-To delete the sample application that you created, use the AWS CLI. Assuming you used your project name for the stack name, you can run the following:
-
-```bash
-aws cloudformation delete-stack --stack-name fastai-container-sam-app
-```
 
 ## Resources
+
+Thanks to [AWS SAM developer guide](https://github.com/mattmcclean/fastai-container-sam-app)
 
 See the [AWS SAM developer guide](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/what-is-sam.html) for an introduction to SAM specification, the SAM CLI, and serverless application concepts.
 
