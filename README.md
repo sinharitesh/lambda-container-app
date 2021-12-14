@@ -117,7 +117,7 @@ You can find more information and examples about filtering Lambda function logs 
 
 ## Resources
 
-Thanks to [AWS SAM developer guide](https://github.com/mattmcclean/fastai-container-sam-app)
+Thanks to [fastai container sam app by Matt](https://github.com/mattmcclean/fastai-container-sam-app)
 
 See the [AWS SAM developer guide](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/what-is-sam.html) for an introduction to SAM specification, the SAM CLI, and serverless application concepts.
 
