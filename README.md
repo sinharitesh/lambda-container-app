@@ -79,6 +79,8 @@ Test a single function by invoking it directly with a test event. An event is a 
 
 Run functions locally and invoke them with the `sam local invoke` command.
 
+![Output of local testing](./local-test-output.png)
+
 ```bash
 lambda-container-app$ sam local invoke FastaiVisionFunction --event event.json
 ```
